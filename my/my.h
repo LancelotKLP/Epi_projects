@@ -13,22 +13,6 @@
     #include <string.h>
     #include <stdarg.h>
 
-typedef struct temp_s {
-    char temps;
-    char temps_bis;
-    char temps_x;
-    char temps_x_bis;
-    int key;
-} temp_t;
-
-typedef struct bloc_s {
-    int val;
-    int last_val;
-    char *type;
-    char *name;
-    struct bloc_s *next;
-} bloc_t;
-
 void my_putchar(char c);
 int my_isneg(int nb);
 void my_put_nbr(int nb);
@@ -42,23 +26,7 @@ int my_is_prime(int nb);
 int my_compute_square_root(int nb);
 int my_find_is_prime(int nb);
 char *my_strcpy(char *dest, char const *src);
-char *my_strncpy(char *dest, char const *src, int n);
-char *my_revstr(char *str);
-char *my_strstr(char *str, char const *to_find);
-int my_strcmp(char const *s1, char const *s2);
 int my_strncmp(char const *s1, char const *s2);
-char *my_strupcase(char *str);
-char *my_strlowcase(char *str);
-char *my_strcapitalize(char *str);
-int my_str_isalpha(char const *str);
-int my_str_isnum(char const *str);
-int my_str_islower(char const *str);
-int my_str_isupper(char const *str);
-int my_str_isprintable(char const *str);
-int my_showstr(char const *str);
-int my_showmem(char const *str, int size);
-char *my_strcat(char *dest, char const *src);
-char *my_strncat(char *dest, char const *src, int nb);
 int my_printf(const char *format, ...);
 void my_putchar(char c);
 void my_put_nbr(int nb);
@@ -94,8 +62,6 @@ int lowcase_u_bis(long nb);
 int lowcase_o(va_list args);
 int lowcase_o_bis(long nb);
 char *my_strdup(const char *);
-
-int main_bis(int ac, char **args);
 
 struct Flag {
     char format;
