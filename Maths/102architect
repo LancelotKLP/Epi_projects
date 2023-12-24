@@ -1,0 +1,173 @@
+#!/usr/bin/python3
+
+from math import *
+import sys
+
+#               ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+#               ▐  _____ _        _    ____ ____   ▌
+#               ▐ |  ___| |      / \  / ___/ ___|  ▌
+#               ▐ | |_  | |     / _ \| |  _\___ \  ▌
+#               ▐ |  _| | |___ / ___ \ |_| |___) | ▌
+#               ▐ |_|   |_____/_/   \_\____|____/  ▌
+#               ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+
+flags = []
+a = len(sys.argv) - 1
+if a == 0:
+    print("Error: not enough arguments")
+    exit(84)
+flags = [0] * a
+for i in range(1, a + 1):
+    flags[i - 1] = sys.argv[i]
+
+#                   ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+#                   ▐  __  __    _    ___ _   _  ▌
+#                   ▐ |  \/  |  / \  |_ _| \ | | ▌
+#                   ▐ | |\/| | / _ \  | ||  \| | ▌
+#                   ▐ | |  | |/ ___ \ | || |\  | ▌
+#                   ▐ |_|  |_/_/   \_\___|_| \_| ▌
+#                   ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+def main(flags):
+    if flags[0] == "-h":
+        print("USAGE")
+        print("    ./102architect x y transfo1 arg11 [arg12] [transfo2 arg21 [arg22]] ...")
+        print("")
+        print("DESCRIPTION")
+        print("    x   abscissa of the original point")
+        print("    y   ordinate of the original point")
+        print("")
+        print("    transfo arg1 [arg2]")
+        print("    -t i j  translation along vector (i, j)")
+        print("    -z m n  scaling by factors m (x-axis) and n (y-axis)")
+        print("    -r d    rotation centered in O by a d degree angle")
+        print("    -s d    reflection over the axis passing through O with an inclination")
+        print("            angle of d degrees")
+        exit(0)
+
+    flags_fct(flags)
+
+#                 ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+#                 ▐  _____ _   _ _   _  ____ _____ ___ ___  _   _ ____   ▌
+#                 ▐ |  ___| | | | \ | |/ ___|_   _|_ _/ _ \| \ | / ___|  ▌
+#                 ▐ | |_  | | | |  \| | |     | |  | | | | |  \| \___ \  ▌
+#                 ▐ |  _| | |_| | |\  | |___  | |  | | |_| | |\  |___) | ▌
+#                 ▐ |_|    \___/|_| \_|\____| |_| |___\___/|_| \_|____/  ▌
+#                 ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+def flags_fct(flags):
+    j = 2
+    x = float(flags[0])
+    y = float(flags[1])
+    while j < a:
+        if flags[j] == "-t":
+            idx = flags.index("-t")
+            if idx + 2 >= len(flags) or flags[idx + 1] == '' or flags[idx + 2] == '':
+                print("Error: not enough arguments")
+                exit(84)
+            print("Translation along vector ({}, {})".format(flags[idx + 1], flags[idx + 2]))
+            vector = translation(flags, idx)
+            flags[0] = vector[0]
+            flags[1] = vector[1]
+            j = j + 3
+        elif flags[j] == "-z":
+            idx = flags.index("-z")
+            if idx + 2 >= len(flags) or flags[idx + 1] == '' or flags[idx + 2] == '':
+                print("Error: not enough arguments")
+                exit(84)
+            print("Scaling by factors {} and {}".format(flags[idx + 1], flags[idx + 2]))            
+            vector = scaling(flags, idx)
+            flags[0] = vector[0]
+            flags[1] = vector[1]
+            j = j + 3
+        elif flags[j] == "-r":
+            idx = flags.index("-r")
+            if idx + 1 >= len(flags) or flags[idx + 1] == '':
+                print("Error: not enough arguments")
+                exit(84)
+            print("Rotation by a {} degree angle".format(flags[idx + 1]))
+            vector = rotation(flags, idx)
+            flags[0] = vector[0]
+            flags[1] = vector[1]
+            j = j + 2
+        elif flags[j] == "-s":
+            idx = flags.index("-s")
+            if idx + 1 >= len(flags) or flags[idx + 1] == '':
+                print("Error: not enough arguments")
+                exit(84)
+            print("Reflection over an axis with an inclination angle of {} degrees".format(flags[idx + 1]))
+            vector = reflection(flags, idx)
+            flags[0] = vector[0]
+            flags[1] = vector[1]
+            j = j + 2
+        else:
+            print("Error: invalid argument")
+            exit(84)
+    print(("({:.2f},{:.2f}) => ({:.2f},{:.2f})".format(x, y, float(flags[0]), float(flags[1]))))
+    exit(0)
+
+def make_scaling(flags, idx):
+    return (flags[idx + 1], flags[idx + 2], 1)
+
+def scaling(flags, idx):
+    matrice = ((float(flags[0]), 0, 0),
+               (0, float(flags[1]), 0),
+               (0, 0, 1))
+    matrice_init = make_scaling(flags, idx)
+    vector = ((float(matrice_init[0]) * matrice[0][0] + float(matrice_init[1]) * matrice[0][1] + float(matrice_init[2]) * matrice[0][2]),
+             (float(matrice_init[0]) * matrice[1][0] + float(matrice_init[1]) * matrice[1][1] + float(matrice_init[2]) * matrice[1][2]),
+             (float(matrice_init[0]) * matrice[2][0] + float(matrice_init[1]) * matrice[2][1] + float(matrice_init[2]) * matrice[2][2]))
+    return vector
+
+def make_translation(flags, idx):
+    return (flags[idx + 1], flags[idx + 2], 1)
+
+def translation(flags, idx):
+    matrice = ((1, 0, float(flags[0])),
+               (0, 1, float(flags[1])),
+               (0, 0, 1))
+    matrice_init = make_translation(flags, idx)
+    vector = ((float(matrice_init[0]) * matrice[0][0] + float(matrice_init[1]) * matrice[0][1] + float(matrice_init[2]) * matrice[0][2]),
+             (float(matrice_init[0]) * matrice[1][0] + float(matrice_init[1]) * matrice[1][1] + float(matrice_init[2]) * matrice[1][2]),
+             (float(matrice_init[0]) * matrice[2][0] + float(matrice_init[1]) * matrice[2][1] + float(matrice_init[2]) * matrice[2][2]))
+    return vector
+
+def make_rotation(flags):
+    return (float(flags[0]), float(flags[1]), 1.00)
+
+def rotation(flags, idx):
+    T = radians(float(flags[idx + 1]))
+    matrice = ((cos(T), -sin(T), 0),
+               (sin(T), cos(T), 0),
+               (0, 0, 1))
+    matrice_init = make_rotation(flags)
+    vector = (round((float(matrice_init[0]) * matrice[0][0] + float(matrice_init[1]) * matrice[0][1] + float(matrice_init[2]) * matrice[0][2]), 2),
+             round((float(matrice_init[0]) * matrice[1][0] + float(matrice_init[1]) * matrice[1][1] + float(matrice_init[2]) * matrice[1][2]), 2),
+             round((float(matrice_init[0]) * matrice[2][0] + float(matrice_init[1]) * matrice[2][1] + float(matrice_init[2]) * matrice[2][2]), 2))
+    return vector
+
+def make_reflection(flags):
+    return (float(flags[0]), float(flags[1]), 1.00)
+
+def reflection(flags, idx):
+    T = radians(2 * float(flags[idx + 1]))
+    matrice = ((cos(T), sin(T), 0),
+               (sin(T), -cos(T), 0),
+               (0, 0, 1))
+    matrice_init = make_reflection(flags)
+    vector = (round((float(matrice_init[0]) * matrice[0][0] + float(matrice_init[1]) * matrice[0][1] + float(matrice_init[2]) * matrice[0][2]), 2),
+             round((float(matrice_init[0]) * matrice[1][0] + float(matrice_init[1]) * matrice[1][1] + float(matrice_init[2]) * matrice[1][2]), 2),
+             round((float(matrice_init[0]) * matrice[2][0] + float(matrice_init[1]) * matrice[2][1] + float(matrice_init[2]) * matrice[2][2]), 2))
+    return vector
+
+#                   ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+#                   ▐  ____ _____  _    ____ _____  ▌
+#                   ▐ / ___|_   _|/ \  |  _ \_   _| ▌
+#                   ▐ \___ \ | | / _ \ | |_) || |   ▌
+#                   ▐  ___) || |/ ___ \|  _ < | |   ▌
+#                   ▐ |____/ |_/_/   \_\_| \_\|_|   ▌
+#                   ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+if __name__ == '__main__':
+    main(flags)

@@ -1,0 +1,107 @@
+#!/usr/bin/python3
+
+from math import *
+import sys
+
+#               ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+#               ▐  _____ _        _    ____ ____   ▌
+#               ▐ |  ___| |      / \  / ___/ ___|  ▌
+#               ▐ | |_  | |     / _ \| |  _\___ \  ▌
+#               ▐ |  _| | |___ / ___ \ |_| |___) | ▌
+#               ▐ |_|   |_____/_/   \_\____|____/  ▌
+#               ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+if len(sys.argv) != 8:
+    sys.exit(84)
+
+a = float(sys.argv[1])
+b = float(sys.argv[2])
+c = float(sys.argv[3])
+d = float(sys.argv[4])
+e = float(sys.argv[5])
+f = float(sys.argv[6])
+n = float(sys.argv[7])
+z = 0;
+
+# ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+# ▐  _____ ____  ____   ___  ____    _   _    _    _   _ ____  _     ___ _   _  ____  ▌
+# ▐ | ____|  _ \|  _ \ / _ \|  _ \  | | | |  / \  | \ | |  _ \| |   |_ _| \ | |/ ___| ▌
+# ▐ |  _| | |_) | |_) | | | | |_) | | |_| | / _ \ |  \| | | | | |    | ||  \| | |  _  ▌
+# ▐ | |___|  _ <|  _ <| |_| |  _ <  |  _  |/ ___ \| |\  | |_| | |___ | || |\  | |_| | ▌
+# ▐ |_____|_| \_\_| \_\\___/|_| \_\ |_| |_/_/   \_\_| \_|____/|_____|___|_| \_|\____| ▌
+# ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+if n < 0:
+    sys.exit(84)
+
+#                   ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+#                   ▐  __  __    _    ___ _   _  ▌
+#                   ▐ |  \/  |  / \  |_ _| \ | | ▌
+#                   ▐ | |\/| | / _ \  | ||  \| | ▌
+#                   ▐ | |  | |/ ___ \ | || |\  | ▌
+#                   ▐ |_|  |_/_/   \_\___|_| \_| ▌
+#                   ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+def main(a, b , c, d, e, f, n):
+    vector_test = [a, b, c, z]
+    final_point = vectored(a, b, c, d, e, f)
+    print("The velocity vector of the ball is:")
+    print(f'({final_point[0]:.2f}, {final_point[1]:.2f}, {final_point[2]:.2f})')
+    final_point = multiple(final_point, n, vector_test)
+    print(f"At time t + {n:.0f}, ball coordinates will be:")
+    print(f'({final_point[0]:.2f}, {final_point[1]:.2f}, {final_point[2]:.2f})')
+    if vector_test[3] > 0:
+        print("The ball won't reach the paddle.")
+        
+#                 ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+#                 ▐  _____ _   _ _   _  ____ _____ ___ ___  _   _ ____   ▌
+#                 ▐ |  ___| | | | \ | |/ ___|_   _|_ _/ _ \| \ | / ___|  ▌
+#                 ▐ | |_  | | | |  \| | |     | |  | | | | |  \| \___ \  ▌
+#                 ▐ |  _| | |_| | |\  | |___  | |  | | |_| | |\  |___) | ▌
+#                 ▐ |_|    \___/|_| \_|\____| |_| |___\___/|_| \_|____/  ▌
+#                 ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+def diff(vector_a, vector_b):
+    vector_d = [0, 0, 0]
+    for i in range(0, 3):
+        vector_d[i] = vector_b[i] - vector_a[i]
+    return vector_d
+
+def touch(vector_test, vector_test_before, touch_count):
+    if (vector_test_before[2] < 0 and vector_test[2] >= 0) or (vector_test_before[2] > 0 and vector_test[2] <= 0):
+        touch_count = touch_count + 1
+        return touch_count
+    else: 
+        return 0
+
+def multiple(final_point, multi_calc, vector_test):
+    touch_count = 0
+    vector_test_before = [0, 0, 0]
+    if multi_calc < 0:
+        print("Error")
+    while multi_calc >= 0:
+        for i in range(0, 3):
+            vector_test[i] = vector_test[i] + final_point[i]
+        multi_calc = multi_calc - 1
+        touch_count = touch_count + touch(vector_test, vector_test_before, touch_count)
+        vector_test_before[2] = vector_test[2]
+    if touch_count == 0:
+        vector_test[3] = 2;
+    return vector_test
+
+def vectored(a, b, c, d, e, f):
+    vector_a = [a, b, c]
+    vector_b = [d, e, f]
+    velocity_vector = diff(vector_a, vector_b)
+    return velocity_vector
+
+#                   ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+#                   ▐  ____ _____  _    ____ _____  ▌
+#                   ▐ / ___|_   _|/ \  |  _ \_   _| ▌
+#                   ▐ \___ \ | | / _ \ | |_) || |   ▌
+#                   ▐  ___) || |/ ___ \|  _ < | |   ▌
+#                   ▐ |____/ |_/_/   \_\_| \_\|_|   ▌
+#                   ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+if __name__ == '__main__':
+    main(a, b, c, d, e, f, n)
