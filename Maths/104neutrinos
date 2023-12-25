@@ -2,6 +2,12 @@
 
 from math import *
 import sys
+import re
+
+def is_valid_number(s):
+    if re.match("^\d+?\\d+?$abcdefgijklmnopqrstuvwxyz ", s) is None:
+        return s.isdigit()
+    return True
 
 #               ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
 #               ▐  _____ _        _    ____ ____   ▌
@@ -16,6 +22,9 @@ a = len(sys.argv) - 1
 flags = [0] * a
 for i in range(1, a + 1):
     flags[i - 1] = sys.argv[i]
+if len(sys.argv) == 1:
+    print("Error: any arguments")
+    exit(84)
 
 # ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
 # ▐  ___ _   _ ___ _____ ___    _    _     ___ ____    _  _____ ___ ___  _   _  ▌
@@ -25,10 +34,17 @@ for i in range(1, a + 1):
 # ▐ |___|_| \_|___| |_| |___/_/   \_\_____|___|____/_/   \_\_| |___\___/|_| \_| ▌
 # ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
 
-number = int(flags[0])
-arithmetic = float(flags[1])
-harmonic = float(flags[2])
-std_deviation = float(flags[3])
+number = 0
+arithmetic = 0
+harmonic = 0
+std_deviation = 0
+
+def check(flags, number, arithmetic, harmonic, std_deviation):
+    number = int(flags[0])
+    arithmetic = float(flags[1])
+    harmonic = float(flags[2])
+    std_deviation = float(flags[3])
+    return number, arithmetic, harmonic, std_deviation
 
 # ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
 # ▐  _____ ____  ____   ___  ____    _   _    _    _   _ ____  _     ___ _   _  ____  ▌
@@ -38,13 +54,27 @@ std_deviation = float(flags[3])
 # ▐ |_____|_| \_\_| \_\\___/|_| \_\ |_| |_/_/   \_\_| \_|____/|_____|___|_| \_|\____| ▌
 # ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
 
-if a < 4 and sys.argv[1] != '-h':
-    print("Error: not enough arguments")
-    exit(84)
-if a > 4:
-    print("Too many arguments")
-    exit(84)
-if a > 1 and sys.argv[1] == '-h':
+if sys.argv[1] != '-h':
+    if (a < 4 and sys.argv[1] != '-h'):
+        print("Error: not enough arguments")
+        exit(84)
+    if a > 4:
+        print("Too many arguments")
+        exit(84)
+    if a > 1 and sys.argv[1] == '-h':
+        print("Invalid argument")
+        exit(84)
+    if not is_valid_number(flags[0]) or not is_valid_number(flags[1]) or not is_valid_number(flags[2]) or not is_valid_number(flags[3]):
+        print("Invalid argument")
+        exit(84)
+    if float(sys.argv[1]) < 0:
+        print("Invalid argument")
+        exit(84)
+    number, arithmetic, harmonic, std_deviation = check(flags, number, arithmetic, harmonic, std_deviation)
+elif sys.argv[1] == '-h' and a == 1:
+    print('USAGE\n    ./104neutrinos n a h sd\n\nDESCRIPTION\n    n       number of values\n    a       arithmetic mean\n    h       harmonic mean\n    sd      standard deviation')
+    exit(0)
+else:
     print("Invalid argument")
     exit(84)
 
@@ -59,10 +89,10 @@ if a > 1 and sys.argv[1] == '-h':
 def main(flags, number, arithmetic, harmonic, std_deviation):
     sum_of_squares = number * (std_deviation ** 2 + arithmetic ** 2)
     while True:
-        if flags[0] == "-h":
-            print('USAGE\n    ./104neutrinos n a h sd\n\nDESCRIPTION\n    n       number of values\n    a       arithmetic mean\n    h       harmonic mean\n    sd      standard deviation')
-            exit(0)
         number_input = input("Enter next value: ")
+        if number_input == "" or not is_valid_number(number_input):
+            print("Error: invalid input")
+            exit(84)
         if number_input == 'END':
             exit(0)
         number_input = int(number_input)
