@@ -13,16 +13,17 @@
 #include <string.h>
 #include "./my.h"
 
-int my_strncmp(char const *s1, char const *s2, int n)
+char *my_revstr(char *str)
 {
-    int i = 0;
+    int i = my_strlen(str) - 1;
     int j = 0;
+    char tmp;
 
-    while (s1[i] != '\0' && s2[j] != '\0' && i < n) {
-        if (s1[i] != s2[j])
-            return (s1[i] - s2[j]);
-        i++;
-        j++;
+    for (int j = 0; i > j; j++) {
+        tmp = str[i];
+        str[i] = str[j];
+        str[j] = tmp;
+        i--;
     }
-    return (0);
+    return (str);
 }

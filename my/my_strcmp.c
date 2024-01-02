@@ -13,16 +13,17 @@
 #include <string.h>
 #include "./my.h"
 
-int my_strncmp(char const *s1, char const *s2, int n)
+int my_strcmp(char const *s1, char const *s2)
 {
     int i = 0;
-    int j = 0;
+    int s1len = strlen(s1);
+    int s2len = strlen(s2);
 
-    while (s1[i] != '\0' && s2[j] != '\0' && i < n) {
-        if (s1[i] != s2[j])
-            return (s1[i] - s2[j]);
-        i++;
-        j++;
+    if (s1len != s2len)
+        return 1;
+    for (; i < s1len; i++) {
+        if (s1[i] != s2[i])
+            return 1;
     }
-    return (0);
+    return 0;
 }

@@ -13,6 +13,10 @@ SRC 	=	my_compute_power_rec.c	\
 		my_strcpy.c	\
 		my_strlen.c	\
 		my_strncmp.c 	\
+		my_strcmp.c 	\
+		my_strncpy.c	\
+		my_revstr.c	\
+		my_getnbr.c	\
 		my_strdup.c	\
 		my_swap.c	\
 		./my_printf/fct_lower_e.c	\
