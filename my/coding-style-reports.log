@@ -1,0 +1,14 @@
+./Makefile:54: MAJOR:C-F3
+./Makefile:57: MAJOR:C-F3
+./Makefile:60: MAJOR:C-F3
+./Makefile:65: MAJOR:C-F3
+./Makefile:68: MAJOR:C-F3
+./Makefile:71: MAJOR:C-F3
+./Makefile:72: MAJOR:C-F3
+./Makefile:73: MAJOR:C-F3
+./Makefile:76: INFO:C-A3
+./Makefile:76: MAJOR:C-F3
+./my_getnbr.c:31: INFO:C-A3
+./my_revstr.c:29: INFO:C-A3
+./my_strncmp.c:28: INFO:C-A3
+./my_strncpy.c:21: INFO:C-A3
